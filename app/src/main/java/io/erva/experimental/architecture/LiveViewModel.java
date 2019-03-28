@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.ParameterizedType;
 import timber.log.Timber;
 
 public abstract class LiveViewModel<T> extends androidx.lifecycle.ViewModel {
@@ -15,10 +16,9 @@ public abstract class LiveViewModel<T> extends androidx.lifecycle.ViewModel {
 
   @SuppressWarnings("unchecked")
   protected LiveViewModel() {
-    ViewData viewDataAnnotation = this.getClass().getAnnotation(ViewData.class);
-    Class<?> viewDataClass = viewDataAnnotation.value();
-
     try {
+      Class<T> viewDataClass =
+          (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
       Constructor constructor = viewDataClass.getConstructor();
       data = (T) constructor.newInstance();
       liveData.setValue(data);

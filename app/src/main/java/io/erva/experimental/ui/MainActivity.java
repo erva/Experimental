@@ -5,10 +5,8 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import io.erva.experimental.R;
 import io.erva.experimental.architecture.LiveActivity;
-import io.erva.experimental.architecture.ViewModel;
 import io.erva.experimental.ui.view.ContentRecyclerView;
 
-@ViewModel(MainViewModel.class)
 public class MainActivity
     extends LiveActivity<MainViewModel, MainViewModel.MainData, MainInterface> {
 

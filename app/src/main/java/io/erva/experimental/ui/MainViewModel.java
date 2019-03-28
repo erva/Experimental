@@ -2,7 +2,6 @@ package io.erva.experimental.ui;
 
 import android.annotation.SuppressLint;
 import io.erva.experimental.architecture.LiveViewModel;
-import io.erva.experimental.architecture.ViewData;
 import io.erva.experimental.ui.cell.MainCell;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -11,7 +10,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import timber.log.Timber;
 
-@ViewData(MainViewModel.MainData.class)
 public class MainViewModel
     extends LiveViewModel<MainViewModel.MainData>
     implements MainInterface {

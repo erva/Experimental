@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import java.lang.reflect.ParameterizedType;
 
 public abstract class LiveActivity<VM extends LiveViewModel<D>, D, I> extends AppCompatActivity {
 
@@ -14,13 +15,13 @@ public abstract class LiveActivity<VM extends LiveViewModel<D>, D, I> extends Ap
   };
   private VM viewModel;
 
-  @Override
+  @SuppressWarnings("unchecked") @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    ViewModel viewModelAnnotation = this.getClass().getAnnotation(ViewModel.class);
-    Class<? extends androidx.lifecycle.ViewModel> modelClass = viewModelAnnotation.value();
-    viewModel = (VM) ViewModelProviders.of(this).get(modelClass);
+    Class<VM> modelClass =
+        (Class<VM>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    viewModel = ViewModelProviders.of(this).get(modelClass);
     viewModel.getLiveData().observe(this, observer);
   }
 

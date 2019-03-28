@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import java.lang.reflect.ParameterizedType;
 
 public abstract class LiveFragment<VM extends LiveViewModel<D>, D, I> extends Fragment {
 
@@ -18,9 +19,9 @@ public abstract class LiveFragment<VM extends LiveViewModel<D>, D, I> extends Fr
   @Override
   public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
-    ViewModel viewModelAnnotation = this.getClass().getAnnotation(ViewModel.class);
-    Class<? extends androidx.lifecycle.ViewModel> modelClass = viewModelAnnotation.value();
-    viewModel = (VM) ViewModelProviders.of(this).get(modelClass);
+    Class<VM> modelClass =
+        (Class<VM>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    viewModel = ViewModelProviders.of(this).get(modelClass);
     viewModel.getLiveData().observe(this, observer);
   }
 

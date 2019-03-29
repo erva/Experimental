@@ -39,7 +39,7 @@ public abstract class LiveActivity<VIEW_MODEL extends LiveViewModel<SCREEN_STATE
     return viewModel.getLiveData().getValue();
   }
 
-  protected abstract void notifyDataSetChanged(@NonNull SCREEN_STATE liveData);
+  protected abstract void notifyDataSetChanged(@NonNull SCREEN_STATE screenState);
 
   @SuppressWarnings("unchecked")
   protected VIEW_MODEL_API getViewModel() {

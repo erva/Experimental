@@ -7,8 +7,10 @@ import io.erva.experimental.R;
 import io.erva.experimental.architecture.LiveActivity;
 import io.erva.experimental.ui.view.ContentRecyclerView;
 
+import static io.erva.experimental.ui.MainScreenState.State.*;
+
 public class MainActivity
-    extends LiveActivity<MainViewModel, MainViewModel.ScreenState, MainInterface> {
+    extends LiveActivity<MainViewModel, MainScreenState, MainInterface> {
 
   private View progressView;
   private ContentRecyclerView recyclerView;
@@ -23,14 +25,27 @@ public class MainActivity
   }
 
   @Override
-  protected void notifyDataSetChanged(@NonNull MainViewModel.ScreenState liveData) {
-    progressView.setVisibility(liveData.progress ? View.VISIBLE : View.GONE);
-    recyclerView.notifyDataSetChanged(liveData.items);
+  protected void notifyDataSetChanged(@NonNull MainScreenState screenState) {
+    switch (screenState.getState()) {
+      case DEFAULT:
+        progressView.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
+        break;
+      case DONE:
+        progressView.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
+        recyclerView.notifyDataSetChanged(screenState.getItems());
+        break;
+      case PROGRESS:
+        progressView.setVisibility(screenState.isProgress() ? View.VISIBLE : View.GONE);
+        recyclerView.setVisibility(View.GONE);
+        break;
+    }
   }
 
   @Override protected void onResume() {
     super.onResume();
-    if (getValue().items.isEmpty()) {
+    if (getValue().getItems().isEmpty()) {
       getViewModel().fetchData();
     }
   }

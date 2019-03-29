@@ -8,7 +8,7 @@ import io.erva.experimental.architecture.LiveActivity;
 import io.erva.experimental.ui.view.ContentRecyclerView;
 
 public class MainActivity
-    extends LiveActivity<MainViewModel, MainViewModel.MainData, MainInterface> {
+    extends LiveActivity<MainViewModel, MainViewModel.ScreenState, MainInterface> {
 
   private View progressView;
   private ContentRecyclerView recyclerView;
@@ -23,7 +23,7 @@ public class MainActivity
   }
 
   @Override
-  protected void notifyDataSetChanged(@NonNull MainViewModel.MainData liveData) {
+  protected void notifyDataSetChanged(@NonNull MainViewModel.ScreenState liveData) {
     progressView.setVisibility(liveData.progress ? View.VISIBLE : View.GONE);
     recyclerView.notifyDataSetChanged(liveData.items);
   }

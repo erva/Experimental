@@ -11,35 +11,35 @@ import java.util.concurrent.TimeUnit;
 import timber.log.Timber;
 
 public class MainViewModel
-    extends LiveViewModel<MainViewModel.MainData>
+    extends LiveViewModel<MainViewModel.ScreenState>
     implements MainInterface {
 
   @SuppressLint("DefaultLocale")
   @Override
   public void fetchData() {
-    data.progress = true;
-    notifyDataSetChanged(data);
+    screenState.progress = true;
+    notifyDataSetChanged(screenState);
 
     registerSubscription(
         Single.timer(2500, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(success -> {
-              data.progress = false;
-              data.items.clear();
+              screenState.progress = false;
+              screenState.items.clear();
               for (int i = 0; i <= 15; i++) {
-                data.items.add(new MainCell.Model(String.format("Item #%d", i)));
+                screenState.items.add(new MainCell.Model(String.format("Item #%d", i)));
               }
-              notifyDataSetChanged(data);
+              notifyDataSetChanged(screenState);
             }, Timber::e)
     );
   }
 
-  public static class MainData {
+  public static class ScreenState {
 
     final List<MainCell.Model> items = new ArrayList<>();
     boolean progress = false;
 
-    public MainData() {
+    public ScreenState() {
     }
   }
 }

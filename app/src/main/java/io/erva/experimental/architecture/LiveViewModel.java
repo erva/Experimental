@@ -8,28 +8,28 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import timber.log.Timber;
 
-public abstract class LiveViewModel<T> extends androidx.lifecycle.ViewModel {
+public abstract class LiveViewModel<SCREEN_STATE> extends androidx.lifecycle.ViewModel {
 
-  protected final T data;
-  private final MutableLiveData<T> liveData = new MutableLiveData<>();
+  protected final SCREEN_STATE screenState;
+  private final MutableLiveData<SCREEN_STATE> liveData = new MutableLiveData<>();
   private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
   @SuppressWarnings("unchecked")
   protected LiveViewModel() {
     try {
-      Class<T> viewDataClass =
-          (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+      Class<SCREEN_STATE> viewDataClass =
+          (Class<SCREEN_STATE>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
       Constructor constructor = viewDataClass.getConstructor();
-      data = (T) constructor.newInstance();
-      liveData.setValue(data);
+      screenState = (SCREEN_STATE) constructor.newInstance();
+      liveData.setValue(screenState);
     } catch (Exception e) {
       Timber.e(e);
-      throw new IllegalStateException("Can't create data class");
+      throw new IllegalStateException("Can't create screen state class");
     }
   }
 
   @NonNull
-  public MutableLiveData<T> getLiveData() {
+  public MutableLiveData<SCREEN_STATE> getLiveData() {
     return liveData;
   }
 
@@ -37,7 +37,7 @@ public abstract class LiveViewModel<T> extends androidx.lifecycle.ViewModel {
     compositeDisposable.add(subscription);
   }
 
-  protected void notifyDataSetChanged(T value) {
+  protected void notifyDataSetChanged(SCREEN_STATE value) {
     liveData.setValue(value);
   }
 
